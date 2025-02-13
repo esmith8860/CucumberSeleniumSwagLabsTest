@@ -14,6 +14,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.Assert;
 
+import java.util.List;
+
 public class BuyingSwagStepDfn {
     private WebDriver driver;
 
@@ -32,8 +34,9 @@ public class BuyingSwagStepDfn {
     }
 
     @Given("I am on the Swag Labs login page")
-    public void i_am_on_the_swag_labs_login_page() {
+    public void i_am_on_the_swag_labs_login_page() throws InterruptedException {
         driver.get("https://www.saucedemo.com/");
+        Thread.sleep(1000);
     }
 
     @When("I enter an accepted username")
@@ -119,5 +122,32 @@ public class BuyingSwagStepDfn {
         Assert.assertEquals(thankYouHeader.getText(), "Thank you for your order!\n" +
                 "Your order has been dispatched, and will arrive just as fast as the pony can get there!\n" +
                 "Back Home");
+    }
+
+    @When("I enter {string} as the username")
+    public void I_enter_standard_user_as_the_username(String username) {
+        driver.findElement(By.name("user-name")).sendKeys(username);
+    }
+
+    @And("I enter {string} as the password")
+    public void I_enter_secret_sauce_as_the_password(String password) throws InterruptedException {
+        driver.findElement(By.name("password")).sendKeys(password);
+        Thread.sleep(2000);
+    }
+
+    @And("I enter the following data on Checkout Your Information page")
+    public void I_enter_the_following_data_on_Checkout_Your_Information_page(List<String> yourInformation) throws InterruptedException {
+        int i = 0;
+        String[] arr = new String[yourInformation.size()];
+        for (String str : yourInformation) {
+            System.out.println(str);
+            arr[i] = str;
+            i++;
+        }
+        driver.findElement(By.name("firstName")).sendKeys(arr[0]);
+        driver.findElement(By.name("lastName")).sendKeys(arr[1]);
+        driver.findElement(By.name("postalCode")).sendKeys(arr[2]);
+        Thread.sleep(2000);
+
     }
 }
