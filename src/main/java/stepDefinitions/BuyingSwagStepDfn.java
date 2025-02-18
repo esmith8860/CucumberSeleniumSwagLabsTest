@@ -14,7 +14,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.Assert;
 
-import java.util.List;
+import java.util.*;
+import java.io.*;
 
 public class BuyingSwagStepDfn {
     private WebDriver driver;
@@ -135,18 +136,44 @@ public class BuyingSwagStepDfn {
         Thread.sleep(2000);
     }
 
+    //Using a list iterator
     @And("I enter the following data on Checkout Your Information page")
     public void I_enter_the_following_data_on_Checkout_Your_Information_page(List<String> yourInformation) throws InterruptedException {
-        int i = 0;
-        String[] arr = new String[yourInformation.size()];
-        for (String str : yourInformation) {
-            System.out.println(str);
-            arr[i] = str;
-            i++;
+        ListIterator<String> yourInformationIterator = yourInformation.listIterator();
+        driver.findElement(By.name("firstName")).sendKeys(yourInformationIterator.next());
+        driver.findElement(By.name("lastName")).sendKeys(yourInformationIterator.next());
+        driver.findElement(By.name("postalCode")).sendKeys(yourInformationIterator.next());
+        Thread.sleep(2000);
+
+    }
+
+    //Using an Array List
+    @And("I input the following data on Checkout Your Information page")
+    public void I_input_the_following_data_on_Checkout_Your_Information_page(List<String> yourInformation) throws InterruptedException {
+        driver.findElement(By.name("firstName")).sendKeys(yourInformation.get(0));
+        driver.findElement(By.name("lastName")).sendKeys(yourInformation.get(1));
+        driver.findElement(By.name("postalCode")).sendKeys(yourInformation.get(2));
+        Thread.sleep(2000);
+
+    }
+
+    //Using Stream
+    @And("I complete the following data on Checkout Your Information page")
+    public void I_complete_the_following_data_on_Checkout_Your_Information_page(List<String> yourInformation) throws InterruptedException {
+        String target = "Marty";
+
+        boolean found = yourInformation.stream().anyMatch(item -> item.equals(target));
+
+        if (found) {
+            System.out.print(target + " is in the list");
+        } else {
+            System.out.println(target + " is not in the list");
         }
-        driver.findElement(By.name("firstName")).sendKeys(arr[0]);
-        driver.findElement(By.name("lastName")).sendKeys(arr[1]);
-        driver.findElement(By.name("postalCode")).sendKeys(arr[2]);
+
+        driver.findElement(By.name("firstName")).sendKeys(yourInformation.get(0));
+        driver.findElement(By.name("lastName")).sendKeys(yourInformation.get(1));
+        driver.findElement(By.name("postalCode")).sendKeys(yourInformation.get(2));
+
         Thread.sleep(2000);
 
     }
