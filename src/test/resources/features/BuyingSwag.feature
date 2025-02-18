@@ -30,7 +30,8 @@ Feature: Swag Labs - Buying Swag
     Then the inventory page should be displayed
 
   @buying_swag
-  Scenario: Validate Successful Purchase with Inputs
+  @ListIterator
+  Scenario: Validate Successful Purchase with Inputs through a List Iterator
     Given I successfully login
     When I click on Add to cart
     And I click on Your Cart
@@ -39,6 +40,36 @@ Feature: Swag Labs - Buying Swag
       | John  |
       | Doe   |
       | 00000 |
+    And I click Continue
+    And I click Finish
+    Then I should be presented with a Thank You message
+
+  @buying_swag
+  @ArrayList
+  Scenario: Validate Successful Purchase with Inputs through an Array List
+    Given I successfully login
+    When I click on Add to cart
+    And I click on Your Cart
+    And I click on Checkout
+    And I input the following data on Checkout Your Information page
+      | Ashley  |
+      | Brown   |
+      | 11111   |
+    And I click Continue
+    And I click Finish
+    Then I should be presented with a Thank You message
+
+  @buying_swag
+  @Stream
+  Scenario: Validate Successful Purchase with Inputs through a Stream
+    Given I successfully login
+    When I click on Add to cart
+    And I click on Your Cart
+    And I click on Checkout
+    And I complete the following data on Checkout Your Information page
+      | Marty  |
+      | Smith  |
+      | 22222  |
     And I click Continue
     And I click Finish
     Then I should be presented with a Thank You message
