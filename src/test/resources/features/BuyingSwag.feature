@@ -1,5 +1,8 @@
 Feature: Swag Labs - Buying Swag
 
+  Background:
+    Given I am on the Swag Labs Home Page
+
   @login
   Scenario: Validate Successful Login
     Given I am on the Swag Labs login page
@@ -45,7 +48,7 @@ Feature: Swag Labs - Buying Swag
     Then I should be presented with a Thank You message
 
   @buying_swag
-  @ArrayList
+  @ListUsingGetMethod
   Scenario: Validate Successful Purchase with Inputs through an Array List
     Given I successfully login
     When I click on Add to cart
@@ -73,3 +76,27 @@ Feature: Swag Labs - Buying Swag
     And I click Continue
     And I click Finish
     Then I should be presented with a Thank You message
+
+  @buying_swag
+  @AllItems
+  Scenario: Validate the correct price of all items added to the cart
+    Given I successfully login
+    When I click on all of the items
+    And I click on Your Cart
+    And I click on Checkout
+    And I enter the following data on Checkout Your Information page
+      | John  |
+      | Doe   |
+      | 00000 |
+    And I click Continue
+    Then I should be presented with the correct total
+
+  @buying_swag
+  @AllItemsDeselected
+  Scenario: Validate the items are showing add to cart after being deselected
+    Given I successfully login
+    When I click on all of the items
+    And I click on Your Cart
+    And I remove all items from Your Cart
+    And I click Continue Shopping
+    Then all items should show Add to cart

@@ -34,9 +34,15 @@ public class BuyingSwagStepDfn {
         driver.quit();
     }
 
+    @Given("I am on the Swag Labs Home Page")
+    public void i_am_on_the_swag_labs_home_page() {
+        driver.get("https://www.saucedemo.com/");
+    }
+
     @Given("I am on the Swag Labs login page")
     public void i_am_on_the_swag_labs_login_page() throws InterruptedException {
         driver.get("https://www.saucedemo.com/");
+        System.out.println(driver.getTitle());
         Thread.sleep(1000);
     }
 
@@ -175,6 +181,61 @@ public class BuyingSwagStepDfn {
         driver.findElement(By.name("postalCode")).sendKeys(yourInformation.get(2));
 
         Thread.sleep(2000);
+    }
 
+    @When("I click on all of the items")
+    public void I_click_on_all_of_the_items() throws InterruptedException {
+        //driver.findElement(By.xpath("//button[contains(@id,'add')]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"] | //button[@id=\"add-to-cart-sauce-labs-bike-light\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bike-light\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bolt-t-shirt\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-onesie\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]")).click();
+
+        Thread.sleep(2000);
+    }
+
+    @Then("I should be presented with the correct total")
+    public void I_should_be_presented_with_the_correct_total() {
+        WebElement total = driver.findElement(By.xpath("//div[@class=\"summary_subtotal_label\"]"));
+        Assert.assertEquals(total.getText(), "Item total: $129.94");
+    }
+
+    @And("I remove all items from Your Cart")
+    public void I_remove_all_items_from_Your_Cart() throws InterruptedException {
+        driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-backpack\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-bike-light\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"remove-test.allthethings()-t-shirt-(red)\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-onesie\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-fleece-jacket\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-bolt-t-shirt\"]")).click();
+
+        Thread.sleep(2000);
+    }
+
+    @And("I click Continue Shopping")
+    public void I_click_Continue_Shopping() throws InterruptedException {
+        //driver.findElement(By.cssSelector("[id=\"continue-shopping\"]")).click();
+        driver.findElement(By.xpath("//button[@id=\"continue-shopping\"]")).click();
+
+        Thread.sleep(2000);
+    }
+
+    @Then("all items should show Add to cart")
+    public void all_items_should_show_Add_to_cart() {
+        WebElement emptiedCart1 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"]"));
+        Assert.assertEquals(emptiedCart1.getText(), "Add to cart");
+        WebElement emptiedCart2 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bike-light\"]"));
+        Assert.assertEquals(emptiedCart2.getText(), "Add to cart");
+        WebElement emptiedCart3 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bolt-t-shirt\"]"));
+        Assert.assertEquals(emptiedCart3.getText(), "Add to cart");
+        WebElement emptiedCart4 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]"));
+        Assert.assertEquals(emptiedCart4.getText(), "Add to cart");
+        WebElement emptiedCart5 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        Assert.assertEquals(emptiedCart5.getText(), "Add to cart");
+        WebElement emptiedCart6 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]"));
+        Assert.assertEquals(emptiedCart6.getText(), "Add to cart");
     }
 }
