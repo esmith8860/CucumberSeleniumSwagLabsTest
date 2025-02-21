@@ -242,4 +242,5 @@ public class BuyingSwagStepDfn {
         WebElement emptiedCart6 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]"));
         Assert.assertEquals(emptiedCart6.getText(), "Add to cart");
     }
+    //For Git
 }
