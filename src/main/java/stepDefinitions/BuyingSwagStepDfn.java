@@ -185,14 +185,18 @@ public class BuyingSwagStepDfn {
 
     @When("I click on all of the items")
     public void I_click_on_all_of_the_items() throws InterruptedException {
-        //driver.findElement(By.xpath("//button[contains(@id,'add')]")).click();
+        List<WebElement> buttonList = driver.findElements(By.xpath("//button[contains(text(),'Add to cart')]"));
+        for (WebElement button: buttonList) {
+            button.click();
+        }
+        //driver.findElement(By.xpath("//button[contains(text(),'Add to cart')]")).click();
         //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"] | //button[@id=\"add-to-cart-sauce-labs-bike-light\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bike-light\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bolt-t-shirt\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-onesie\"]")).click();
-        driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bike-light\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bolt-t-shirt\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-onesie\"]")).click();
+        //driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]")).click();
 
         Thread.sleep(2000);
     }
