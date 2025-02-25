@@ -83,6 +83,7 @@ Feature: Swag Labs - Buying Swag
     Given I successfully login
     When I click on all of the items
     And I click on Your Cart
+    And I calculate the total cost of the items
     And I click on Checkout
     And I enter the following data on Checkout Your Information page
       | John  |
@@ -100,3 +101,26 @@ Feature: Swag Labs - Buying Swag
     And I remove all items from Your Cart
     And I click Continue Shopping
     Then all items should show Add to cart
+
+  @buying_swag
+  @RandomItems
+  Scenario: Validate the correct price of a random item added to the cart
+    Given I successfully login
+    When I click on a random item
+    And I click on Your Cart
+    And I calculate the total cost of the items
+    And I click on Checkout
+    And I enter the following data on Checkout Your Information page
+      | John  |
+      | Doe   |
+      | 00000 |
+    And I click Continue
+    Then I should be presented with the correct total
+
+  @login
+  @AllUsernames
+  Scenario: Validate all accepted usernames
+    Given I am on the Swag Labs login page
+    When I enter the listed usernames under Accepted usernames are
+    And I click login
+    Then I will see the inventory page

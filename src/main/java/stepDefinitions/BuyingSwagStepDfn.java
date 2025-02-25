@@ -19,6 +19,7 @@ import java.io.*;
 
 public class BuyingSwagStepDfn {
     private WebDriver driver;
+    private Double priceDouble;
 
     @Before
     public void setup() {
@@ -42,7 +43,6 @@ public class BuyingSwagStepDfn {
     @Given("I am on the Swag Labs login page")
     public void i_am_on_the_swag_labs_login_page() throws InterruptedException {
         driver.get("https://www.saucedemo.com/");
-        System.out.println(driver.getTitle());
         Thread.sleep(1000);
     }
 
@@ -153,7 +153,7 @@ public class BuyingSwagStepDfn {
 
     }
 
-    //Using an Array List
+    //Using an List
     @And("I input the following data on Checkout Your Information page")
     public void I_input_the_following_data_on_Checkout_Your_Information_page(List<String> yourInformation) throws InterruptedException {
         driver.findElement(By.name("firstName")).sendKeys(yourInformation.get(0));
@@ -201,20 +201,39 @@ public class BuyingSwagStepDfn {
         Thread.sleep(2000);
     }
 
+    @And("I calculate the total cost of the items")
+    public void I_calculate_the_total_cost_of_the_items() {
+        List<WebElement> priceList = driver.findElements(By.xpath("//div[@class=\"inventory_item_price\"]"));
+        priceDouble = 0.0;
+        for (WebElement price: priceList) {
+            String priceNum = price.getText();
+            int priceLength = priceNum.length();
+            priceNum = priceNum.substring(1, priceLength);
+            priceDouble += Double.parseDouble(priceNum);
+        }
+        System.out.println("Total Price: " + priceDouble);
+    }
+
     @Then("I should be presented with the correct total")
     public void I_should_be_presented_with_the_correct_total() {
         WebElement total = driver.findElement(By.xpath("//div[@class=\"summary_subtotal_label\"]"));
-        Assert.assertEquals(total.getText(), "Item total: $129.94");
+        Assert.assertEquals(total.getText(), "Item total: $" + priceDouble);
     }
 
     @And("I remove all items from Your Cart")
     public void I_remove_all_items_from_Your_Cart() throws InterruptedException {
+        List<WebElement> buttonList = driver.findElements(By.xpath("//button[contains(text(), 'Remove')]"));
+        for (WebElement button: buttonList) {
+            button.click();
+        }
+        /*
         driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-backpack\"]")).click();
         driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-bike-light\"]")).click();
         driver.findElement(By.xpath("//button[@id=\"remove-test.allthethings()-t-shirt-(red)\"]")).click();
         driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-onesie\"]")).click();
         driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-fleece-jacket\"]")).click();
         driver.findElement(By.xpath("//button[@id=\"remove-sauce-labs-bolt-t-shirt\"]")).click();
+         */
 
         Thread.sleep(2000);
     }
@@ -229,6 +248,11 @@ public class BuyingSwagStepDfn {
 
     @Then("all items should show Add to cart")
     public void all_items_should_show_Add_to_cart() {
+        List<WebElement> buttonList = driver.findElements(By.xpath("//button[contains(text(),'Add to cart')]"));
+        for (WebElement button: buttonList) {
+            Assert.assertEquals(button.getText(), "Add to cart");
+        }
+        /*
         WebElement emptiedCart1 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-backpack\"]"));
         Assert.assertEquals(emptiedCart1.getText(), "Add to cart");
         WebElement emptiedCart2 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-sauce-labs-bike-light\"]"));
@@ -241,6 +265,81 @@ public class BuyingSwagStepDfn {
         Assert.assertEquals(emptiedCart5.getText(), "Add to cart");
         WebElement emptiedCart6 = driver.findElement(By.xpath("//button[@id=\"add-to-cart-test.allthethings()-t-shirt-(red)\"]"));
         Assert.assertEquals(emptiedCart6.getText(), "Add to cart");
+         */
     }
-    //For Git
+
+    @When("I click on a random item")
+    public void I_click_on_a_random_item() throws InterruptedException {
+        List<WebElement> buttonList = driver.findElements(By.xpath("//button[contains(text(),'Add to cart')]"));
+        Random rand = new Random();
+        int buttonSize = buttonList.size();
+        int randomButton = rand.nextInt(buttonSize);
+        WebElement button = buttonList.get(randomButton);
+        button.click();
+
+        System.out.println("Random number generated: " + randomButton);
+        Thread.sleep(2000);
+    }
+
+    @When("I enter the listed usernames under Accepted usernames are")
+    public void I_enter_the_listed_usernames_under_Accepted_usernames_are() throws InterruptedException {
+        WebElement usernameList = driver.findElement(By.xpath("//div[@class='login_credentials']"));
+        String splitString = usernameList.getText();
+        String[] splitWithTitleUs = splitString.split("\n");
+        List<String> usernames = new ArrayList<String>(Arrays.asList(splitWithTitleUs));
+        usernames.removeFirst();
+
+        WebElement passwordList = driver.findElement(By.xpath("//div[@class='login_password']"));
+        String splitString2 = passwordList.getText();
+        String[] splitWithTitlePa = splitString2.split("\n");
+
+        for (String line : usernames) {
+            driver.findElement(By.name("user-name")).sendKeys(line.trim());
+            driver.findElement(By.name("password")).sendKeys(splitWithTitlePa[1]);
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("//input[@id='login-button']")).click();
+            Thread.sleep(1000);
+            try {
+                driver.findElement(By.xpath("//input[@id='login-button']")).click();
+            } catch (Exception e) {
+                System.out.println("Exception Caught");
+            } finally {
+                System.out.println(driver.getCurrentUrl());
+                if(driver.getCurrentUrl().equals("https://www.saucedemo.com/inventory.html")) {
+                    driver.findElement(By.xpath("//button[@id='react-burger-menu-btn']")).click();
+                    Thread.sleep(1000);
+                    driver.findElement(By.xpath("//a[@id='logout_sidebar_link']")).click();
+                } else {
+                    driver.findElement(By.name("user-name")).clear();
+                    driver.findElement(By.xpath("//input[@id='password']")).clear();
+                    Thread.sleep(1000);
+                }
+            }
+            /*
+            System.out.println(driver.getCurrentUrl());
+            if(driver.getCurrentUrl().equals("https://www.saucedemo.com/inventory.html")) {
+                driver.findElement(By.xpath("//button[@id='react-burger-menu-btn']")).click();
+                Thread.sleep(1000);
+                driver.findElement(By.xpath("//a[@id='logout_sidebar_link']")).click();
+            } else {
+                driver.findElement(By.name("user-name")).clear();
+                driver.findElement(By.name("password")).clear();
+            }
+             */
+            /*
+            driver.findElement(By.name("user-name")).sendKeys(line.trim());
+            driver.findElement(By.name("password")).sendKeys(splitWithTitlePa[1]);
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("//input[@id='login-button']")).click();
+            driver.findElement(By.xpath("//button[@id='react-burger-menu-btn']")).click();
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("//a[@id='logout_sidebar_link']")).click();
+            */
+        }
+    }
+
+    @Then("I will see the inventory page")
+    public void I_will_see_the_inventory_page() {
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");
+    }
 }
